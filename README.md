@@ -2,72 +2,75 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# NestJS User Management System
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This project is built using NestJS, a progressive Node.js framework for building efficient and scalable server-side applications. It leverages RabbitMQ for message queuing and handles user registration, authentication, and avatar management with an emphasis on interaction with external APIs and local file and data management.
 
-## Description
+## Prerequisites
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Node.js version 20.11
+- RabbitMQ
+- NestJS (Make sure to have the Nest CLI installed globally)
+- A MongoDB for storing user data and avatars in base64 format.
 
 ## Installation
 
-```bash
-$ npm install
-```
+1. Clone the repository to your local machine.
 
-## Running the app
+   ```bash
+   git clone https://github.com/sunoul41/user-services-rest-api.git
+   ```
 
-```bash
-# development
-$ npm run start
+2. Navigate into the project directory.
 
-# watch mode
-$ npm run start:dev
+   ```bash
+   cd user-services-rest-api
+   ```
 
-# production mode
-$ npm run start:prod
-```
+3. Install the dependencies.
 
-## Test
+   ```bash
+   npm install
+   ```
+   
+4. Ensure RabbitMQ is running on your local environment.
 
-```bash
-# unit tests
-$ npm run test
+5. Copy `.env.example` to `.env` and update the environment variables to match your local setup, including RabbitMQ and database credentials.
 
-# e2e tests
-$ npm run test:e2e
+## Features
 
-# test coverage
-$ npm run test:cov
-```
+### User Registration
 
-## Support
+- Registers a new user with the required details.
+- Sends a success email to the user upon registration.
+- Publishes an event to RabbitMQ indicating the successful registration of a user.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Get User by ID
 
-## Stay in touch
+- Retrieves a user by their ID from an external API (https://reqres.in).
+- The response includes the user's details.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### User Avatar Management
 
-## License
+- Gets the user's avatar from an external API and saves it to the database in base64 format.
+- Saves the avatar on the server as a plain file.
+- Sends the avatar data in base64 format to the client upon request.
+- Deletes the user's avatar from the database and also deletes the corresponding plain file from the server.
 
-Nest is [MIT licensed](LICENSE).
+
+## Running the Application
+
+To start the application, run:
+
+    npm run start
+
+For development, you can watch for changes and automatically reload the server using:
+
+    npm run start:dev
+
+## API Endpoints
+
+- POST **/users** - Registers a new user.
+- GET **/users/{id}** - Retrieves a user by ID from an external API.
+- GET **/users/avatar/{id}** - Retrieves a user's avatar in base64 format.
+- DELETE **/users/avatar/{id}** - Deletes a user's avatar from the database and server.
